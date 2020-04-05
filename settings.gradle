@@ -1,0 +1,2 @@
+rootProject.name='Cálculo de IMC (Índice de Masa Corporal)'
+include ':app'
