@@ -7,4 +7,6 @@
     <string name="estatura">Estatura</string>
     <string name="peso">peso</string>
     <string name="peso_capitalized">Peso</string>
+    <string name="_0">0</string>
+    <string name="mostrar_resultado">Mostrar Resultado</string>
 </resources>
