@@ -15,20 +15,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Variables
+        val intent:Intent = Intent(this, ResultadoActivity::class.java)
         val estaturaTextView:TextView = findViewById(R.id.estatura_text)
         val pesoTextView:TextView = findViewById(R.id.peso_text)
-        var resultado:String = ""
+        var resultado:String = "0.0"
+        var estatura:Double = 0.0
+        var peso:Double = 0.0
+        var imc:Double = 0.0
+        val df = DecimalFormat("#.##")
+        var conclusion:String = ""
 
+        //Boton procesar
         val botonProcesar: Button = findViewById(R.id.procesar_button)
         botonProcesar.setOnClickListener{
-            var estatura = estaturaTextView.text.toString().toDouble() / 100
-            var peso = pesoTextView.text.toString().toDouble() / 2.2
-            val estaturaTotal:Double = estatura*estatura
-            val imc:Double = peso /estaturaTotal
-            val df = DecimalFormat("#.##")
-            var conclusion:String = ""
+            //Inicializaciones
+
+            estatura = estaturaTextView.text.toString().toDouble() / 100
+            peso = pesoTextView.text.toString().toDouble() / 2.2
+            imc = peso /(estatura*estatura)
             df.roundingMode = RoundingMode.CEILING
 
+            //Calculando conclusion
             if(df.format(imc).toDouble() < 18.5){
                 conclusion = "Bajo peso"
             }else if((df.format(imc).toDouble() >= 18.5) && (df.format(imc).toDouble() <= 24.5)) {
@@ -37,22 +45,27 @@ class MainActivity : AppCompatActivity() {
                 conclusion = "Sobrepeso"
             }else if(df.format(imc).toDouble() > 30.0){
                 conclusion = "Obesidad"
+            }else if(df.format(imc).toDouble() == 0.0){
+                "Nulo porque no ha llenado los campos"
             }
 
-            resultado = "Segun tu peso: " + df.format(peso) +", tu estatura: "+ df.format(estatura)+", tu IMC es: "+df.format(imc)+", lo cual indica: "+conclusion
+            //Resultado Final
+            resultado = "Segun tu peso: " + df.format(peso) +" (kg), tu estatura: "+ df.format(estatura)+" (m), tu IMC es: "+df.format(imc)+", lo cual indica: "+conclusion
 
-            val intent:Intent = Intent(this, ResultadoActivity::class.java)
-            intent.putExtra("IMC",resultado)
-            startActivity(intent)
-
+            //Cambiar activity
+            if (estaturaTextView.text.toString().isNotEmpty() && pesoTextView.text.toString().isNotEmpty()){
+                intent.putExtra("IMC",resultado)
+                intent.putExtra("conclusion", conclusion)
+                startActivity(intent)
+            }else{
+                Toast.makeText(this, "Debe llenar los campos", Toast.LENGTH_SHORT).show()
+            }
         }
 
+        //LongClick mostar Toast Formula
         botonProcesar.setOnLongClickListener{
             Toast.makeText(this, "Formula: IMC=Peso/(Estatura*Estatura)", Toast.LENGTH_SHORT).show()
             return@setOnLongClickListener true
         }
     }
-
-
-
 }

@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.content.Intent
+import android.widget.ImageView
 
 class ResultadoActivity : AppCompatActivity() {
 
@@ -13,12 +14,28 @@ class ResultadoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resultado)
 
-
+        //Variables externas
+        var imagen: ImageView
         val resultadoTextView:TextView = findViewById(R.id.resultado_text)
-        val rollButton: Button = findViewById(R.id.resultado_button)
-        rollButton.text = "Mostrar Resultado"
-        rollButton.setOnClickListener{
-            resultadoTextView.text = getIntent().getStringExtra("IMC")
+        var conclusion:String = getIntent().getStringExtra("conclusion")
+        resultadoTextView.text = getIntent().getStringExtra("IMC")
+
+        //Seleccion de imagen de conclusion
+        imagen = findViewById(R.id.result_Image)
+        if(conclusion == "Normal"){
+            imagen.setImageResource(R.drawable.ic_good)
+        }else if(conclusion == "Obesidad"){
+            imagen.setImageResource(R.drawable.ic_bad)
+        }else if((conclusion == "Bajo peso") || (conclusion == "Sobrepeso")){
+            imagen.setImageResource(R.drawable.ic_warning)
+        }
+
+        //Boton para regresar
+        val button: Button = findViewById(R.id.resultado_button)
+        button.text = "Regresar"
+        button.setOnClickListener{
+            val intent:Intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
